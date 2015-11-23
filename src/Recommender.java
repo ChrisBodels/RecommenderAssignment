@@ -78,7 +78,7 @@ public class Recommender
 				throw new Exception("Invalid movie length: "+movieTokens.length);
 			}
 		}
-		System.out.println(movies.get(5).getTitle());
+		System.out.println(movies.get(1).getGenre());
 		File ratingsFile = new File("Small_Data_Set/ratings5.dat");
 		In inRatings = new In(ratingsFile);
 		while(!inRatings.isEmpty())
@@ -96,6 +96,44 @@ public class Recommender
 			}
 		}
 		System.out.println(ratings.get(49).getMovieId());
+		System.out.println(getMovieDetails(9));
+	}
+	
+	public void setUserScores()
+	{
+		for(int i = 0; i < users.size(); i++)
+		{
+			int unknownScore, actionScore, adventureScore, animationScore, childrensScore, comedyScore, 
+			crimeScore, documentaryScore, dramaScore, fantasyScore, filmNoirScore, horrorScore, musicalScore, mysteryScore,
+			romanceScore, sciFiScore, thrillerScore, warScore, westernScore = 0;
+			for(int n = 0; n < ratings.size(); n++)
+			{
+				
+			}
+		}
+	}
+	
+	public void setUsersRatings()  //Not efficient, try to fix
+	{
+		ArrayList<Rating> userRatings = new ArrayList<Rating>();
+		for(int i = 0; i < users.size(); i++)
+		{
+			userRatings.clear();
+			for(int n = 0; n < ratings.size(); n++)
+			{
+				if(ratings.get(n).getUserId() == users.get(i).getUserId())
+					userRatings.add(ratings.get(n));
+			}
+			users.get(i).importUserRatings(userRatings);
+		}
+	}
+	
+	public void getUserRecommendations(int userId)
+	{
+		for(int i = 0; i < users.size(); i++)
+		{
+			
+		}
 	}
 	
 	public void addUser(String firstName, String lastName, int age, String gender, String occupation) throws Exception
@@ -108,10 +146,25 @@ public class Recommender
 		users.remove(userId - 1);
 	}
 	
-	/*public void addMovie(String title, String longDate, String url)
+	public void addMovie(String title, String longDate, String url, boolean unkown, boolean action, boolean adventure,
+			boolean animation, boolean childrens, boolean comedy, boolean crime, boolean documentary, boolean drama, 
+			boolean fantasy, boolean filmNoir, boolean horror, boolean musical, boolean mystery, boolean romance, 
+			boolean sciFi, boolean thriller, boolean war, boolean western)
 	{
-		movies.add(new Movie(movies.size(), title, longDate, url));
-	}*/
+		movies.add(new Movie(movies.size(), title, longDate, url, unkown, action, adventure, animation, childrens,
+				comedy, crime, documentary, fantasy, filmNoir, horror, musical, mystery, romance, drama, sciFi,
+				thriller, war, western));
+	}
+	
+	public void removeMovie(int movieId)
+	{
+		movies.remove(movieId - 1);
+	}
+	
+	public String getMovieDetails(int movieId)
+	{
+		return movies.get(movieId).toString();
+	}
 	
 	public void addRating(int userId, int movieId, int rating)
 	{
@@ -129,22 +182,17 @@ public class Recommender
 		
 	}
 	
-	public void getUserRecommendations(int userID) //NOT SURE ABOUT VOID HERE
-	{
-		
-	}
-	
-	public void getTopTenMovies() //NOT SURE ABOUT VOID HERE
-	{
-		
-	}
-	
 	public void load()
 	{
 		
 	}
 	
 	public void write()
+	{
+		
+	}
+	
+	public void getTopTenMovies()
 	{
 		
 	}

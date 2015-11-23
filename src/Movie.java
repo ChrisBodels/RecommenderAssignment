@@ -131,5 +131,10 @@ public class Movie {
 			genre += "Western. ";
 		return genre;
 	}
+	
+	public String toString()
+	{
+		return "Movie title: " + title + ". Release Date: " + longDate + ". Movie ID: " + movieId + ". " + getGenre() + "URL: " + url +"";
+	}
 
 }
