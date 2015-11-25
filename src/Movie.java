@@ -1,10 +1,11 @@
 
-public class Movie {
+public class Movie implements Comparable<Movie> {
 	
 	private String title, url, longDate;
 	private int year, movieId;
 	private boolean unknown, action, adventure, animation, childrens, comedy, crime, documentary, drama, 
 					fantasy, filmNoir, horror, musical, mystery, romance, sciFi, thriller, war, western;
+	double totalRating;
 	
 	public Movie(int movieId, String title, String longDate, String url/*, int year*/, boolean unknown, 
 			boolean action, boolean adventure, boolean animation, boolean childrens, boolean comedy, 
@@ -36,6 +37,33 @@ public class Movie {
 		this.thriller = thriller;
 		this.war = war;
 		this.western = western;
+	}
+	
+	public int compareTo(Movie compareMovie) //IF STATEMENTS TO GET -1, 1 OR 0
+	{
+		double compareTotalRating = compareMovie.getTotalRating();
+		
+		if(compareTotalRating < this.totalRating)
+		{
+			return -1;
+		}
+		if(compareTotalRating > this.totalRating)
+		{
+			return 1;
+		}
+		return 0;
+		
+		//return (int) ((int)compareTotalRating - Math.round(this.totalRating));
+	}
+	
+	public double getTotalRating()
+	{
+		return this.totalRating;
+	}
+	
+	public void setTotalRating(double rating)
+	{
+		this.totalRating = toTwoDecimalPlaces(rating);
 	}
 	
 	public String getTitle()
@@ -88,6 +116,101 @@ public class Movie {
 		this.movieId = movieId;
 	}
 	
+	public boolean getUnknown()
+	{
+		return this.unknown;
+	}
+	
+	public boolean getAction()
+	{
+		return this.action;
+	}
+	
+	public boolean getAdventure()
+	{
+		return this.adventure;
+	}
+	
+	public boolean getAnimation()
+	{
+		return this.animation;
+	}
+	
+	public boolean getChildrens()
+	{
+		return this.childrens;
+	}
+	
+	public boolean getComedy()
+	{
+		return this.comedy;
+	}
+	
+	public boolean getCrime()
+	{
+		return this.crime;
+	}
+	
+	public boolean getDocumentary()
+	{
+		return this.documentary;
+	}
+	
+	public boolean getDrama()
+	{
+		return this.drama;
+	}
+	
+	public boolean getFantasy()
+	{
+		return this.fantasy;
+	}
+	
+	public boolean getFilmNoir()
+	{
+		return this.filmNoir;
+	}
+	
+	public boolean getHorror()
+	{
+		return this.horror;
+	}
+	
+	public boolean getMusical()
+	{
+		return this.musical;
+	}
+	
+	public boolean getMystery()
+	{
+		return this.mystery;
+	}
+	
+	public boolean getRomance()
+	{
+		return this.romance;
+	}
+	
+	public boolean getSciFi()
+	{
+		return this.sciFi;
+	}
+	
+	public boolean getThriller()
+	{
+		return this.thriller;
+	}
+	
+	public boolean getWar()
+	{
+		return this.war;
+	}
+	
+	public boolean getWestern()
+	{
+		return this.western;
+	}
+	
 	public String getGenre()
 	{
 		String genre = "Genre(s): ";
@@ -130,6 +253,11 @@ public class Movie {
 		if(this.western)
 			genre += "Western. ";
 		return genre;
+	}
+	
+	private double toTwoDecimalPlaces(double num)
+	{
+		return (int) (num *100 ) /100.0; 
 	}
 	
 	public String toString()

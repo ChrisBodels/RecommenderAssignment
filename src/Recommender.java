@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Collections;
 import java.util.ArrayList;
 
 import edu.princeton.cs.introcs.In;
@@ -15,11 +16,13 @@ public class Recommender
 		users = new ArrayList<User>();
 		movies = new ArrayList<Movie>();
 		ratings = new ArrayList<Rating>();
+		
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
 		Recommender app = new Recommender();
+		//app.load(); MAKE SURE TO FIX THIS
 		app.readInData();
 	}
 	
@@ -95,21 +98,142 @@ public class Recommender
 				throw new Exception("Invalid ratings length: "+ratingsTokens.length);
 			}
 		}
+		
+		
 		System.out.println(ratings.get(49).getMovieId());
 		System.out.println(getMovieDetails(9));
+		System.out.println(getUserRatings(1));
+		addTotalMovieRatings();
+		for(int i = 0; i < movies.size(); i++)
+		{
+			System.out.println("Total rating: " + movies.get(i).getTotalRating() + ". Movie: " + movies.get(i).getTitle() + ". Movie ID: " + movies.get(i).getMovieId());
+		}
+		System.out.println("");
+		
+		getTopTenMovies();
+		
+		System.out.println("");
+		
+		for(int i = 0; i < movies.size(); i++)
+		{
+			System.out.println("Total rating: " + movies.get(i).getTotalRating() + ". Movie: " + movies.get(i).getTitle() + ". Movie ID: " + movies.get(i).getMovieId());
+		}
 	}
 	
-	public void setUserScores()
+	public void setUserScores() //can probably move this to User class in order to make it not quadratic using the userRatings arraylist
 	{
+		int unknownScore, actionScore, adventureScore, animationScore, childrensScore, comedyScore, 
+		crimeScore, documentaryScore, dramaScore, fantasyScore, filmNoirScore, horrorScore, musicalScore, mysteryScore,
+		romanceScore, sciFiScore, thrillerScore, warScore, westernScore;
 		for(int i = 0; i < users.size(); i++)
 		{
-			int unknownScore, actionScore, adventureScore, animationScore, childrensScore, comedyScore, 
-			crimeScore, documentaryScore, dramaScore, fantasyScore, filmNoirScore, horrorScore, musicalScore, mysteryScore,
-			romanceScore, sciFiScore, thrillerScore, warScore, westernScore = 0;
+			unknownScore = 0;
+			actionScore = 0;
+			adventureScore = 0;
+			animationScore = 0;
+			childrensScore = 0;
+			comedyScore = 0;
+			crimeScore = 0;
+			documentaryScore = 0;
+			dramaScore = 0;
+			fantasyScore = 0;
+			filmNoirScore = 0;
+			horrorScore = 0;
+			musicalScore = 0;
+			mysteryScore = 0;
+			romanceScore = 0;
+			sciFiScore = 0;
+			thrillerScore = 0;
+			warScore = 0;
+			westernScore = 0;
+			
 			for(int n = 0; n < ratings.size(); n++)
 			{
-				
+				if(ratings.get(n).getUserId() == users.get(i).getUserId())
+				{
+					int currentMovieId = ratings.get(n).getMovieId() -1;
+					if(movies.get(currentMovieId).getUnknown())
+					{
+						unknownScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getAction())
+					{
+						actionScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getAdventure())
+					{
+						adventureScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getAnimation())
+					{
+						animationScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getChildrens())
+					{
+						childrensScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getComedy())
+					{
+						comedyScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getCrime())
+					{
+						crimeScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getDocumentary())
+					{
+						documentaryScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getDrama())
+					{
+						dramaScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getFantasy())
+					{
+						fantasyScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getFilmNoir())
+					{
+						filmNoirScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getHorror())
+					{
+						horrorScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getMusical())
+					{
+						musicalScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getMystery())
+					{
+						mysteryScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getRomance())
+					{
+						romanceScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getSciFi())
+					{
+						sciFiScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getThriller())
+					{
+						thrillerScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getWar())
+					{
+						warScore += ratings.get(n).getRating();
+					}
+					if(movies.get(currentMovieId).getWestern())
+					{
+						westernScore += ratings.get(n).getRating();
+					}
+				}
 			}
+			users.get(i).setScores(unknownScore, actionScore, adventureScore, animationScore,
+					childrensScore, comedyScore, crimeScore, documentaryScore, dramaScore, fantasyScore,
+					filmNoirScore, horrorScore, musicalScore, mysteryScore, romanceScore, sciFiScore, thrillerScore,
+					warScore, westernScore);
 		}
 	}
 	
@@ -126,6 +250,7 @@ public class Recommender
 			}
 			users.get(i).importUserRatings(userRatings);
 		}
+		setUserScores();
 	}
 	
 	public void getUserRecommendations(int userId)
@@ -177,24 +302,68 @@ public class Recommender
 		return movie;
 	}
 	
-	public void getUserRatings(int userID) //NOT SURE ABOUT VOID HERE
+	public String getUserRatings(int userId) 
 	{
-		
+		setUsersRatings(); //take this out at some point
+		ArrayList<Rating> userRatings = new ArrayList<Rating>();
+		userRatings = users.get(userId - 1).getUserRatings();
+		String usersRatings = "";
+		for(int i = 0; i < userRatings.size(); i++)
+		{
+			usersRatings += "Movie: " + movies.get(userRatings.get(i).getMovieId()-1).getTitle() + ". Rating: " + userRatings.get(i).getRating() + ". \n";
+		}
+		if(usersRatings == "")
+			return "No ratings for this user ID, go rate some movies!";
+		else
+			return usersRatings;
 	}
 	
-	public void load()
+	public void load() throws Exception
 	{
-		
+		users = HandleXML.readUsers();
+		movies = HandleXML.readMovies();
+		ratings = HandleXML.readRatings();
+		if(users.isEmpty() && movies.isEmpty() && ratings.isEmpty())
+		{
+			readInData();
+		}
+		setUsersRatings();
 	}
 	
-	public void write()
+	public void write() throws Exception
 	{
-		
+		HandleXML.writeUsers(users);
+		HandleXML.writeMovies(movies);
+		HandleXML.writeRatings(ratings);
+	}
+	
+	public void addTotalMovieRatings()
+	{
+		double rating;
+		double numOfRatings;
+		for(int i = 0; i < movies.size(); i++)
+		{
+			numOfRatings = 0;
+			rating = 0;
+			for(int n = 0; n < ratings.size(); n++)
+			{
+				if(ratings.get(n).getMovieId() == movies.get(i).getMovieId())
+				{
+					rating += ratings.get(n).getRating();
+					numOfRatings++;
+				}
+			}
+			movies.get(i).setTotalRating(rating/numOfRatings);
+		}
 	}
 	
 	public void getTopTenMovies()
 	{
-		
+		Collections.sort(movies);
+		for(int i = 0; i < movies.size(); i++)
+		{
+			System.out.println("Total rating: " + movies.get(i).getTotalRating() + ". Movie: " + movies.get(i).getTitle());
+		}
 	}
 	
 	public boolean genreTranslator(int input)

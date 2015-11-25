@@ -9,6 +9,8 @@ public class User {
 	crimeScore, documentaryScore, dramaScore, fantasyScore, filmNoirScore, horrorScore, musicalScore, mysteryScore,
 	romanceScore, sciFiScore, thrillerScore, warScore, westernScore;
 	private String firstName, surname, gender, occupation;
+	private ArrayList<Rating> ratings;
+	private int[] scores;
 	
 	public User(int userId, String firstName, String surname, int age, String gender, String occupation) throws Exception
 	{
@@ -18,9 +20,10 @@ public class User {
 		this.surname = surname;
 		this.gender = gender;
 		this.occupation = occupation;
+		ratings = new ArrayList<Rating>();
 	}
 	
-	public void addScores(int unknownScore,int actionScore,int adventureScore,int animationScore,int childrensScore,int comedyScore, 
+	public void setScores(int unknownScore,int actionScore,int adventureScore,int animationScore,int childrensScore,int comedyScore, 
 			int crimeScore,int documentaryScore,int dramaScore,int fantasyScore,int filmNoirScore,int horrorScore,int musicalScore,int mysteryScore,
 			int romanceScore,int sciFiScore,int thrillerScore,int warScore,int westernScore)
 	{
@@ -47,6 +50,87 @@ public class User {
 	
 	//user should have list of rated movies
 	public void importUserRatings(ArrayList<Rating> ratings)
+	{
+		this.ratings = ratings;
+	}
+	
+	public ArrayList<Rating> getUserRatings()
+	{
+		return this.ratings;
+	}
+	
+	public void sortArray()
+	{
+		int[] scores = new int[18];
+		scores[0] = unknownScore;
+		scores[1] = actionScore;
+		scores[2] = adventureScore;
+		scores[3] = animationScore;
+		scores[4] = childrensScore;
+		scores[5] = comedyScore;
+		scores[6] = crimeScore;
+		scores[7] = documentaryScore;
+		scores[8] = dramaScore;
+		scores[9] = fantasyScore;
+		scores[10] = filmNoirScore;
+		scores[11] = horrorScore;
+		scores[12] = musicalScore;
+		scores[13] = mysteryScore;
+		scores[14] = romanceScore;
+		scores[15] = sciFiScore;
+		scores[16] = thrillerScore;
+		scores[17] = warScore;
+		scores[18] = westernScore;
+	}
+	
+	public int getTopGenre()
+	{
+		int currentTop = unknownScore;
+		if(actionScore > currentTop)
+			currentTop = actionScore;
+		if(adventureScore > currentTop)
+			currentTop = adventureScore;
+		if(animationScore > currentTop)
+			currentTop = animationScore;
+		if(childrensScore > currentTop)
+			currentTop = childrensScore;
+		if(comedyScore > currentTop)
+			currentTop = comedyScore;
+		if(crimeScore > currentTop)
+			currentTop = crimeScore;
+		if(documentaryScore > currentTop)
+			currentTop = documentaryScore;
+		if(dramaScore > currentTop)
+			currentTop = dramaScore;
+		if(fantasyScore > currentTop)
+			currentTop = fantasyScore;
+		if(filmNoirScore > currentTop)
+			currentTop = filmNoirScore;
+		if(horrorScore > currentTop)
+			currentTop = horrorScore;
+		if(musicalScore > currentTop)
+			currentTop = musicalScore;
+		if(mysteryScore > currentTop)
+			currentTop = mysteryScore;
+		if(romanceScore > currentTop)
+			currentTop = romanceScore;
+		if(sciFiScore > currentTop)
+			currentTop = sciFiScore;
+		if(thrillerScore > currentTop)
+			currentTop = thrillerScore;
+		if(warScore > currentTop)
+			currentTop = warScore;
+		if(westernScore > currentTop)
+			currentTop = westernScore;
+		return currentTop;
+	}
+	
+	//public int getSecondTopGenre()
+	{
+		
+	}
+	
+	//public int getThirdTopGenre()
 	{
 		
 	}
