@@ -1,17 +1,26 @@
-import java.io.File;
-import java.util.ArrayList;
 
-import edu.princeton.cs.introcs.In;
+import java.util.ArrayList;
 
 public class User {
 	
-	private int userId, age, unknownScore, actionScore, adventureScore, animationScore, childrensScore, comedyScore, 
+	private int userId, age;
+	private double unknownScore, actionScore, adventureScore, animationScore, childrensScore, comedyScore, 
 	crimeScore, documentaryScore, dramaScore, fantasyScore, filmNoirScore, horrorScore, musicalScore, mysteryScore,
 	romanceScore, sciFiScore, thrillerScore, warScore, westernScore;
 	private String firstName, surname, gender, occupation;
 	private ArrayList<Rating> ratings;
-	private int[] scores;
 	
+	/**
+	 * The constructor for objects of type User. Takes in user id and a number of details about the user
+	 * 
+	 * @param userId An int used to identify the user
+	 * @param firstName The user's first name
+	 * @param surname The user's surname
+	 * @param age The user's age
+	 * @param gender The user's gender
+	 * @param occupation The user's occupation
+	 * @throws Exception
+	 */
 	public User(int userId, String firstName, String surname, int age, String gender, String occupation) throws Exception
 	{
 		this.userId = userId;
@@ -23,9 +32,33 @@ public class User {
 		ratings = new ArrayList<Rating>();
 	}
 	
-	public void setScores(int unknownScore,int actionScore,int adventureScore,int animationScore,int childrensScore,int comedyScore, 
-			int crimeScore,int documentaryScore,int dramaScore,int fantasyScore,int filmNoirScore,int horrorScore,int musicalScore,int mysteryScore,
-			int romanceScore,int sciFiScore,int thrillerScore,int warScore,int westernScore)
+	/**
+	 * This method sets the users "score" for each genre which means that if they rated a movie of a certain genre highly then the "score" for that
+	 * genre will go up. These scores are used for recommending movies based on genres they like.
+	 * 
+	 * @param unknownScore An double which shows how the user tends to like movies in the unknown genre
+	 * @param actionScore An double which shows how the user tends to like movies in the action genre
+	 * @param adventureScore An double which shows how the user tends to like movies in the adventure genre
+	 * @param animationScore An double which shows how the user tends to like movies in the animation genre
+	 * @param childrensScore An double which shows how the user tends to like movies in the children's genre
+	 * @param comedyScore An double which shows how the user tends to like movies in the comedy genre
+	 * @param crimeScore An double which shows how the user tends to like movies in the crime genre
+	 * @param documentaryScore An double which shows how the user tends to like movies in the documentary genre
+	 * @param dramaScore An double which shows how the user tends to like movies in the drama genre
+	 * @param fantasyScore An double which shows how the user tends to like movies in the fantasy genre
+	 * @param filmNoirScore An double which shows how the user tends to like movies in the film-noir genre
+	 * @param horrorScore An double which shows how the user tends to like movies in the horror genre
+	 * @param musicalScore An double which shows how the user tends to like movies in the musical genre
+	 * @param mysteryScore An double which shows how the user tends to like movies in the mystery genre
+	 * @param romanceScore An double which shows how the user tends to like movies in the romance genre
+	 * @param sciFiScore An double which shows how the user tends to like movies in the sci-fi genre
+	 * @param thrillerScore An double which shows how the user tends to like movies in the thriller genre
+	 * @param warScore An double which shows how the user tends to like movies in the war genre
+	 * @param westernScore An double which shows how the user tends to like movies in the western genre
+	 */
+	public void setScores(double unknownScore,double actionScore,double adventureScore,double animationScore,double childrensScore,double comedyScore, 
+			double crimeScore,double documentaryScore,double dramaScore,double fantasyScore,double filmNoirScore,double horrorScore,double musicalScore,double mysteryScore,
+			double romanceScore,double sciFiScore,double thrillerScore,double warScore,double westernScore)
 	{
 		this.unknownScore = unknownScore;
 		this.actionScore = actionScore;
@@ -48,7 +81,6 @@ public class User {
 		this.westernScore = westernScore;
 	}
 	
-	//user should have list of rated movies
 	public void importUserRatings(ArrayList<Rating> ratings)
 	{
 		this.ratings = ratings;
@@ -59,175 +91,201 @@ public class User {
 		return this.ratings;
 	}
 	
-	public void sortArray()
+	public String getTopGenre()
 	{
-		int[] scores = new int[18];
-		scores[0] = unknownScore;
-		scores[1] = actionScore;
-		scores[2] = adventureScore;
-		scores[3] = animationScore;
-		scores[4] = childrensScore;
-		scores[5] = comedyScore;
-		scores[6] = crimeScore;
-		scores[7] = documentaryScore;
-		scores[8] = dramaScore;
-		scores[9] = fantasyScore;
-		scores[10] = filmNoirScore;
-		scores[11] = horrorScore;
-		scores[12] = musicalScore;
-		scores[13] = mysteryScore;
-		scores[14] = romanceScore;
-		scores[15] = sciFiScore;
-		scores[16] = thrillerScore;
-		scores[17] = warScore;
-		scores[18] = westernScore;
-	}
-	
-	public int getTopGenre()
-	{
-		int currentTop = unknownScore;
-		if(actionScore > currentTop)
-			currentTop = actionScore;
-		if(adventureScore > currentTop)
-			currentTop = adventureScore;
-		if(animationScore > currentTop)
-			currentTop = animationScore;
-		if(childrensScore > currentTop)
-			currentTop = childrensScore;
-		if(comedyScore > currentTop)
-			currentTop = comedyScore;
-		if(crimeScore > currentTop)
-			currentTop = crimeScore;
-		if(documentaryScore > currentTop)
-			currentTop = documentaryScore;
-		if(dramaScore > currentTop)
-			currentTop = dramaScore;
-		if(fantasyScore > currentTop)
-			currentTop = fantasyScore;
-		if(filmNoirScore > currentTop)
-			currentTop = filmNoirScore;
-		if(horrorScore > currentTop)
-			currentTop = horrorScore;
-		if(musicalScore > currentTop)
-			currentTop = musicalScore;
-		if(mysteryScore > currentTop)
-			currentTop = mysteryScore;
-		if(romanceScore > currentTop)
-			currentTop = romanceScore;
-		if(sciFiScore > currentTop)
-			currentTop = sciFiScore;
-		if(thrillerScore > currentTop)
-			currentTop = thrillerScore;
-		if(warScore > currentTop)
-			currentTop = warScore;
-		if(westernScore > currentTop)
-			currentTop = westernScore;
+		String currentTop = "unknown";
+		double currentTopScore = unknownScore;
+		if(actionScore > currentTopScore)
+		{
+			currentTop = "action";
+			currentTopScore = actionScore;
+		}	
+		if(adventureScore > currentTopScore)
+		{
+			currentTopScore = adventureScore;
+			currentTop = "adventure";
+		}
+		if(animationScore > currentTopScore)
+		{
+			currentTop = "animation";
+			currentTopScore = animationScore;
+		}
+		if(childrensScore > currentTopScore)
+		{
+			currentTop = "childrens";
+			currentTopScore = childrensScore;
+		}
+		if(comedyScore > currentTopScore)
+		{
+			currentTop = "comedy";
+			currentTopScore = comedyScore;
+		}
+		if(crimeScore > currentTopScore)
+		{
+			currentTop = "crime";
+			currentTopScore = crimeScore;
+		}
+		if(documentaryScore > currentTopScore)
+		{
+			currentTop = "documentary";
+			currentTopScore = documentaryScore;
+		}
+		if(dramaScore > currentTopScore)
+		{
+			currentTop = "drama";
+			currentTopScore = dramaScore;
+		}
+		if(fantasyScore > currentTopScore)
+		{
+			currentTop = "fantasy";
+			currentTopScore = fantasyScore;
+		}
+		if(filmNoirScore > currentTopScore)
+		{
+			currentTop = "filmNoir";
+			currentTopScore = filmNoirScore;
+		}
+		if(horrorScore > currentTopScore)
+		{
+			currentTop = "horror";
+			currentTopScore = horrorScore;
+		}
+		if(musicalScore > currentTopScore)
+		{
+			currentTop = "musical";
+			currentTopScore = musicalScore;
+		}
+		if(mysteryScore > currentTopScore)
+		{
+			currentTop = "mystery";
+			currentTopScore = mysteryScore;
+		}
+		if(romanceScore > currentTopScore)
+		{
+			currentTop = "romance";
+			currentTopScore = romanceScore;
+		}	
+		if(sciFiScore > currentTopScore)
+		{
+			currentTop = "sciFi";
+			currentTopScore = sciFiScore;
+		}
+		if(thrillerScore > currentTopScore)
+		{
+			currentTop = "thriller";
+			currentTopScore = thrillerScore;
+		}
+		if(warScore > currentTopScore)
+		{
+			currentTop = "war";
+			currentTopScore = warScore;
+		}
+		if(westernScore > currentTopScore)
+		{
+			currentTop = "western";
+			currentTopScore = westernScore;
+		}
 		return currentTop;
 	}
 	
-	//public int getSecondTopGenre()
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
+	public double getUnknownScore()
 	{
-		
+		return toTwoDecimalPlaces(unknownScore);
 	}
 	
-	//public int getThirdTopGenre()
+	public double getActionScore()
 	{
-		
+		return toTwoDecimalPlaces(actionScore);
 	}
 	
-	public int getUnknownScore()
+	public double getAdventureScore()
 	{
-		return unknownScore;
+		return toTwoDecimalPlaces(adventureScore);
 	}
 	
-	public int getActionScore()
+	public double getAnimationScore()
 	{
-		return actionScore;
+		return toTwoDecimalPlaces(animationScore);
 	}
 	
-	public int getAdventureScore()
+	public double getChildrensScore()
 	{
-		return adventureScore;
+		return toTwoDecimalPlaces(childrensScore);
 	}
 	
-	public int getAnimationScore()
+	public double getComedyScore()
 	{
-		return animationScore;
+		return toTwoDecimalPlaces(comedyScore);
 	}
 	
-	public int getChildrensScore()
+	public double getCrimeScore()
 	{
-		return childrensScore;
+		return toTwoDecimalPlaces(crimeScore);
 	}
 	
-	public int getComedyScore()
+	public double getDocumentaryScore()
 	{
-		return comedyScore;
+		return toTwoDecimalPlaces(documentaryScore);
 	}
 	
-	public int getCrimeScore()
+	public double getDramaScore()
 	{
-		return crimeScore;
+		return toTwoDecimalPlaces(dramaScore);
 	}
 	
-	public int getDocumentaryScore()
+	public double getFantasyScore()
 	{
-		return documentaryScore;
+		return toTwoDecimalPlaces(fantasyScore);
 	}
 	
-	public int getDramaScore()
+	public double getFilmNoirScore()
 	{
-		return dramaScore;
+		return toTwoDecimalPlaces(filmNoirScore);	
 	}
 	
-	public int getFantasyScore()
+	public double getHorrorScore()
 	{
-		return fantasyScore;
+		return toTwoDecimalPlaces(horrorScore);
 	}
 	
-	public int getFilmNoirScore()
+	public double getMusicalScore()
 	{
-		return filmNoirScore;	
+		return toTwoDecimalPlaces(musicalScore);
 	}
 	
-	public int getHorrorScore()
+	public double getMysteryScore()
 	{
-		return horrorScore;
+		return toTwoDecimalPlaces(mysteryScore);
 	}
 	
-	public int getMusicalScore()
+	public double getRomanceScore()
 	{
-		return musicalScore;
+		return toTwoDecimalPlaces(romanceScore);
 	}
 	
-	public int getMysteryScore()
+	public double getSciFiScore()
 	{
-		return mysteryScore;
+		return toTwoDecimalPlaces(sciFiScore);
 	}
 	
-	public int getRomanceScore()
+	public double getThrillerScore()
 	{
-		return romanceScore;
+		return toTwoDecimalPlaces(thrillerScore);
 	}
 	
-	public int getSciFiScore()
+	public double getWarScore()
 	{
-		return sciFiScore;
+		return toTwoDecimalPlaces(warScore);
 	}
 	
-	public int getThrillerScore()
+	public double getWesternScore()
 	{
-		return thrillerScore;
-	}
-	
-	public int getWarScore()
-	{
-		return warScore;
-	}
-	
-	public int getWesternScore()
-	{
-		return westernScore;
+		return toTwoDecimalPlaces(westernScore);
 	}
 	
 	public int getUserId()
@@ -249,7 +307,7 @@ public class User {
 		this.age = age;
 	}
 	
-	public String getfirstName()
+	public String getFirstName()
 	{
 		return this.firstName;
 	}
@@ -287,6 +345,11 @@ public class User {
 	public void setOccupation(String occupation)
 	{
 		this.occupation = occupation;
+	}
+	
+	private double toTwoDecimalPlaces(double number)
+	{
+		return (int) (number *100 ) /100.0;
 	}
 
 }

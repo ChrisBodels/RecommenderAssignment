@@ -1,7 +1,6 @@
 import java.io.File;
 import java.util.Collections;
 import java.util.ArrayList;
-
 import edu.princeton.cs.introcs.In;
 
 
@@ -11,42 +10,38 @@ public class Recommender
 	private ArrayList<User> users;
 	private ArrayList<Rating> ratings;
 	
-	public Recommender()
+	public Recommender() throws Exception
 	{
 		users = new ArrayList<User>();
 		movies = new ArrayList<Movie>();
 		ratings = new ArrayList<Rating>();
-		
 	}
 	
-	public static void main(String[] args) throws Exception
+	
+	public ArrayList<User> getUsers()
 	{
-		Recommender app = new Recommender();
-		//app.load(); MAKE SURE TO FIX THIS
-		app.readInData();
+		return users;
 	}
 	
-	public void readInData() throws Exception //HARD CODED STUFF HERE?
+	public User getUser(int userId)
 	{
-		File usersFile = new File("Small_Data_Set/users5.dat");
+		User user = users.get(userId - 1);
+		return user;
+	}
+	
+	public void readInData() throws Exception
+	{
+		File usersFile = new File("data_movieLens/users.dat");
 		In inUsers = new In(usersFile);
-		//each field is separated(delimited) by a '|'
 		String delims = "[|]";
 		while (!inUsers.isEmpty()) 
 		{
-			// get user and rating from data source
 			String userDetails = inUsers.readLine();
 
-			// parse user details string
 			String[] userTokens = userDetails.split(delims);
 
-			// output user data to console.
 			if (userTokens.length == 7) 
 			{
-				System.out.println("UserID: "+userTokens[0]+",First Name:"+
-            		 userTokens[1]+",Surname:" + userTokens[2]+",Age:"+
-                     Integer.parseInt(userTokens[3])+",Gender:"+userTokens[4]+",Occupation:"+
-                     userTokens[5]);
 				users.add(new User(Integer.parseInt(userTokens[0]), userTokens[1], userTokens[2],
 						Integer.parseInt(userTokens[3]), userTokens[4], userTokens[5]));
 			}
@@ -55,7 +50,7 @@ public class Recommender
 				throw new Exception("Invalid member length: "+userTokens.length);
 			}
 		}
-		File moviesFile = new File("Small_Data_Set/items5.dat");
+		File moviesFile = new File("data_movieLens/items.dat");
 		In inMovies = new In(moviesFile);
 		while(!inMovies.isEmpty())
 		{
@@ -81,8 +76,7 @@ public class Recommender
 				throw new Exception("Invalid movie length: "+movieTokens.length);
 			}
 		}
-		System.out.println(movies.get(1).getGenre());
-		File ratingsFile = new File("Small_Data_Set/ratings5.dat");
+		File ratingsFile = new File("data_movieLens/ratings.dat");
 		In inRatings = new In(ratingsFile);
 		while(!inRatings.isEmpty())
 		{
@@ -98,35 +92,40 @@ public class Recommender
 				throw new Exception("Invalid ratings length: "+ratingsTokens.length);
 			}
 		}
-		
-		
-		System.out.println(ratings.get(49).getMovieId());
-		System.out.println(getMovieDetails(9));
-		System.out.println(getUserRatings(1));
 		addTotalMovieRatings();
-		for(int i = 0; i < movies.size(); i++)
-		{
-			System.out.println("Total rating: " + movies.get(i).getTotalRating() + ". Movie: " + movies.get(i).getTitle() + ". Movie ID: " + movies.get(i).getMovieId());
-		}
-		System.out.println("");
-		
-		getTopTenMovies();
-		
-		System.out.println("");
-		
-		for(int i = 0; i < movies.size(); i++)
-		{
-			System.out.println("Total rating: " + movies.get(i).getTotalRating() + ". Movie: " + movies.get(i).getTitle() + ". Movie ID: " + movies.get(i).getMovieId());
-		}
+		setUsersRatings();
 	}
 	
-	public void setUserScores() //can probably move this to User class in order to make it not quadratic using the userRatings arraylist
+	public void setUsersRatings()
 	{
 		int unknownScore, actionScore, adventureScore, animationScore, childrensScore, comedyScore, 
 		crimeScore, documentaryScore, dramaScore, fantasyScore, filmNoirScore, horrorScore, musicalScore, mysteryScore,
-		romanceScore, sciFiScore, thrillerScore, warScore, westernScore;
+		romanceScore, sciFiScore, thrillerScore, warScore, westernScore, unknownCount, actionCount, adventureCount, 
+		animationCount, childrensCount, comedyCount, crimeCount, documentaryCount, dramaCount, fantasyCount, 
+		filmNoirCount, horrorCount, musicalCount, mysteryCount, romanceCount, sciFiCount, thrillerCount, 
+		warCount, westernCount;
+		ArrayList<Rating> userRatings = new ArrayList<Rating>();
 		for(int i = 0; i < users.size(); i++)
 		{
+			unknownCount = 0;
+			actionCount = 0;
+			adventureCount = 0;
+			animationCount = 0;
+			childrensCount = 0;
+			comedyCount = 0;
+			crimeCount = 0;
+			documentaryCount = 0;
+			dramaCount = 0;
+			fantasyCount = 0;
+			filmNoirCount = 0;
+			horrorCount = 0;
+			musicalCount = 0;
+			mysteryCount = 0;
+			romanceCount = 0;
+			sciFiCount = 0;
+			thrillerCount = 0;
+			warCount = 0;
+			westernCount = 0;
 			unknownScore = 0;
 			actionScore = 0;
 			adventureScore = 0;
@@ -146,7 +145,7 @@ public class Recommender
 			thrillerScore = 0;
 			warScore = 0;
 			westernScore = 0;
-			
+			userRatings.clear();
 			for(int n = 0; n < ratings.size(); n++)
 			{
 				if(ratings.get(n).getUserId() == users.get(i).getUserId())
@@ -155,115 +154,398 @@ public class Recommender
 					if(movies.get(currentMovieId).getUnknown())
 					{
 						unknownScore += ratings.get(n).getRating();
+						unknownCount++;
 					}
 					if(movies.get(currentMovieId).getAction())
 					{
 						actionScore += ratings.get(n).getRating();
+						actionCount++;
 					}
 					if(movies.get(currentMovieId).getAdventure())
 					{
 						adventureScore += ratings.get(n).getRating();
+						adventureCount++;
 					}
 					if(movies.get(currentMovieId).getAnimation())
 					{
 						animationScore += ratings.get(n).getRating();
+						animationCount++;
 					}
 					if(movies.get(currentMovieId).getChildrens())
 					{
 						childrensScore += ratings.get(n).getRating();
+						childrensCount++;
 					}
 					if(movies.get(currentMovieId).getComedy())
 					{
 						comedyScore += ratings.get(n).getRating();
+						comedyCount++;
 					}
 					if(movies.get(currentMovieId).getCrime())
 					{
 						crimeScore += ratings.get(n).getRating();
+						crimeCount++;
 					}
 					if(movies.get(currentMovieId).getDocumentary())
 					{
 						documentaryScore += ratings.get(n).getRating();
+						documentaryCount++;
 					}
 					if(movies.get(currentMovieId).getDrama())
 					{
 						dramaScore += ratings.get(n).getRating();
+						dramaCount++;
 					}
 					if(movies.get(currentMovieId).getFantasy())
 					{
 						fantasyScore += ratings.get(n).getRating();
+						fantasyCount++;
 					}
 					if(movies.get(currentMovieId).getFilmNoir())
 					{
 						filmNoirScore += ratings.get(n).getRating();
+						filmNoirCount++;
 					}
 					if(movies.get(currentMovieId).getHorror())
 					{
 						horrorScore += ratings.get(n).getRating();
+						horrorCount++;
 					}
 					if(movies.get(currentMovieId).getMusical())
 					{
 						musicalScore += ratings.get(n).getRating();
+						musicalCount++;
 					}
 					if(movies.get(currentMovieId).getMystery())
 					{
 						mysteryScore += ratings.get(n).getRating();
+						mysteryCount++;
 					}
 					if(movies.get(currentMovieId).getRomance())
 					{
 						romanceScore += ratings.get(n).getRating();
+						romanceCount++;
 					}
 					if(movies.get(currentMovieId).getSciFi())
 					{
 						sciFiScore += ratings.get(n).getRating();
+						sciFiCount++;
 					}
 					if(movies.get(currentMovieId).getThriller())
 					{
 						thrillerScore += ratings.get(n).getRating();
+						thrillerCount++;
 					}
 					if(movies.get(currentMovieId).getWar())
 					{
 						warScore += ratings.get(n).getRating();
+						warCount++;
 					}
 					if(movies.get(currentMovieId).getWestern())
 					{
 						westernScore += ratings.get(n).getRating();
+						westernCount++;
 					}
+					userRatings.add(ratings.get(n));
 				}
 			}
-			users.get(i).setScores(unknownScore, actionScore, adventureScore, animationScore,
-					childrensScore, comedyScore, crimeScore, documentaryScore, dramaScore, fantasyScore,
-					filmNoirScore, horrorScore, musicalScore, mysteryScore, romanceScore, sciFiScore, thrillerScore,
-					warScore, westernScore);
-		}
-	}
-	
-	public void setUsersRatings()  //Not efficient, try to fix
-	{
-		ArrayList<Rating> userRatings = new ArrayList<Rating>();
-		for(int i = 0; i < users.size(); i++)
-		{
-			userRatings.clear();
-			for(int n = 0; n < ratings.size(); n++)
-			{
-				if(ratings.get(n).getUserId() == users.get(i).getUserId())
-					userRatings.add(ratings.get(n));
-			}
 			users.get(i).importUserRatings(userRatings);
+			users.get(i).setScores(unknownScore/zeroAvoider(unknownCount), actionScore/zeroAvoider(actionCount), 
+					adventureScore/zeroAvoider(adventureCount), animationScore/zeroAvoider(animationCount),
+					childrensScore/zeroAvoider(childrensCount), comedyScore/zeroAvoider(comedyCount), 
+					crimeScore/zeroAvoider(crimeCount), documentaryScore/zeroAvoider(documentaryCount), 
+					dramaScore/zeroAvoider(dramaCount), fantasyScore/zeroAvoider(fantasyCount),
+					filmNoirScore/zeroAvoider(filmNoirCount), horrorScore/zeroAvoider(horrorCount), 
+					musicalScore/zeroAvoider(musicalCount), mysteryScore/zeroAvoider(mysteryCount), 
+					romanceScore/zeroAvoider(romanceCount), sciFiScore/zeroAvoider(sciFiCount), thrillerScore/zeroAvoider(thrillerCount),
+					warScore/zeroAvoider(warCount), westernScore/zeroAvoider(westernCount));
 		}
-		setUserScores();
 	}
 	
 	public void getUserRecommendations(int userId)
 	{
-		for(int i = 0; i < users.size(); i++)
+		User recommendee = users.get((userId-1));
+		if(recommendee.getUserRatings().size() > 9) // only recommends movies based on other users if the user has rated at least 10 movies
 		{
-			
+			String genre = recommendee.getTopGenre();
+			int count = 0;
+				if(genre == "unknown")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getUnknown())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "action")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getAction())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "adventure")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getAdventure())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "animation")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getAnimation())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "childrens")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getChildrens())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "comedy")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getComedy())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "crime")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getCrime())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "documentary")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getDocumentary())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "drama")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getDrama())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "fantasy")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getFantasy())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "filmNoir")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getFilmNoir())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "horror")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getHorror())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "musical")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getMusical())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "mystery")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getMystery())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "romance")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getRomance())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "sciFi")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getSciFi())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "thriller")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getThriller())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "war")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getWar())
+							{
+								System.out.println("Recommendation " + (count+1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+				if(genre == "western")
+				{
+					for(int i = 0; i < users.size(); i++)
+					{
+						for(int n = 0; n < users.get(i).getUserRatings().size(); n++)
+						{
+							if(users.get(i).getUserRatings().get(n).getRating() > 3 && movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getWestern())
+							{
+								System.out.println("Recommendation " + (count +1) + ": " + movies.get(users.get(i).getUserRatings().get(n).getMovieId()).getTitle());
+								count++;
+							}
+						}
+					}
+				}
+			}
+		else
+		{
+			System.out.println("We see that yo have not rated many movies yet, until you do here is the top ten movies by users' ratings: ");
+			getTopTenMovies();
 		}
 	}
 	
 	public void addUser(String firstName, String lastName, int age, String gender, String occupation) throws Exception
 	{
-		users.add(new User(users.size(), firstName, lastName, age, gender, occupation));
+		users.add(new User(users.size() + 1, firstName, lastName, age, gender, occupation));
 	}
 	
 	public void removeUser(int userId)
@@ -271,13 +553,13 @@ public class Recommender
 		users.remove(userId - 1);
 	}
 	
-	public void addMovie(String title, String longDate, String url, boolean unkown, boolean action, boolean adventure,
+	public void addMovie(String title, String longDate, String url, boolean unknown, boolean action, boolean adventure,
 			boolean animation, boolean childrens, boolean comedy, boolean crime, boolean documentary, boolean drama, 
 			boolean fantasy, boolean filmNoir, boolean horror, boolean musical, boolean mystery, boolean romance, 
 			boolean sciFi, boolean thriller, boolean war, boolean western)
 	{
-		movies.add(new Movie(movies.size(), title, longDate, url, unkown, action, adventure, animation, childrens,
-				comedy, crime, documentary, fantasy, filmNoir, horror, musical, mystery, romance, drama, sciFi,
+		movies.add(new Movie(movies.size(), title, longDate, url, unknown, action, adventure, animation, childrens,
+				comedy, crime, documentary, drama, fantasy, filmNoir, horror, musical, mystery, romance, sciFi,
 				thriller, war, western));
 	}
 	
@@ -288,12 +570,26 @@ public class Recommender
 	
 	public String getMovieDetails(int movieId)
 	{
-		return movies.get(movieId).toString();
+		if(movieId > 0 && movieId <= movies.size())
+		{
+			return movies.get(movieId -1).toString();
+		}
+		else
+		{
+			return "Invalid movie ID entered. Please enter a valid movie ID.";
+		}
 	}
 	
 	public void addRating(int userId, int movieId, int rating)
 	{
-		ratings.add(new Rating(userId, movieId, rating));
+		if(rating > 0 && rating < 6)
+		{
+			ratings.add(new Rating(userId, movieId, rating));
+		}
+		else
+		{
+			System.out.println("Invalid rating entered. Please enter a rating from 1-5.");
+		}
 	}
 	
 	public Movie getMovie(int movieId)
@@ -304,7 +600,6 @@ public class Recommender
 	
 	public String getUserRatings(int userId) 
 	{
-		setUsersRatings(); //take this out at some point
 		ArrayList<Rating> userRatings = new ArrayList<Rating>();
 		userRatings = users.get(userId - 1).getUserRatings();
 		String usersRatings = "";
@@ -323,14 +618,11 @@ public class Recommender
 		users = HandleXML.readUsers();
 		movies = HandleXML.readMovies();
 		ratings = HandleXML.readRatings();
-		if(users.isEmpty() && movies.isEmpty() && ratings.isEmpty())
-		{
-			readInData();
-		}
 		setUsersRatings();
+		addTotalMovieRatings();
 	}
 	
-	public void write() throws Exception
+	public void save() throws Exception
 	{
 		HandleXML.writeUsers(users);
 		HandleXML.writeMovies(movies);
@@ -360,10 +652,20 @@ public class Recommender
 	public void getTopTenMovies()
 	{
 		Collections.sort(movies);
-		for(int i = 0; i < movies.size(); i++)
+		for(int i = 0; i < 10; i++)
 		{
 			System.out.println("Total rating: " + movies.get(i).getTotalRating() + ". Movie: " + movies.get(i).getTitle());
 		}
+	}
+	
+	public String getAllMovies()
+	{
+		String moviesString = "";
+		for(int i = 0; i < movies.size(); i++)
+		{
+			moviesString += "Movie ID: " + movies.get(i).getMovieId() + ". " + movies.get(i).toString() + "\n ";
+		}
+		return moviesString;
 	}
 	
 	public boolean genreTranslator(int input)
@@ -372,5 +674,17 @@ public class Recommender
 			return true;
 		else
 			return false;
+	}
+	
+	private int zeroAvoider(int num)
+	{
+		if(num == 0)
+		{
+			return 1;
+		}
+		else
+		{
+			return num;
+		}
 	}
 }
