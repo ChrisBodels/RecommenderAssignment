@@ -101,7 +101,7 @@ public class Main
 		recommenderAPI.readInData();
 	}
 	
-	@Command(description="Load data from file")
+	/*@Command(description="Load data from file")
 	public void load() throws Exception
 	{
 		recommenderAPI.load();
@@ -111,7 +111,7 @@ public class Main
 	public void save() throws Exception
 	{
 		recommenderAPI.save();
-	}
+	}*/
 	
 	@Command(description="Recommend movies")
 	public void recommend(@Param(name="user id") int userId)

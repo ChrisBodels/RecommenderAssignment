@@ -3,13 +3,22 @@ import java.util.Collections;
 import java.util.ArrayList;
 import edu.princeton.cs.introcs.In;
 
-
+/**
+ * 
+ * @author Chris Bodels
+ *
+ */
 public class Recommender 
 {
 	private ArrayList<Movie> movies;
 	private ArrayList<User> users;
 	private ArrayList<Rating> ratings;
 	
+	/**
+	 * Constructor for objects of type recommender
+	 * 
+	 * @throws Exception
+	 */
 	public Recommender() throws Exception
 	{
 		users = new ArrayList<User>();
@@ -17,18 +26,33 @@ public class Recommender
 		ratings = new ArrayList<Rating>();
 	}
 	
-	
+	/**
+	 * Returns the ArrayList that contains all the users
+	 * 
+	 * @return The ArrayList that contains all the users
+	 */
 	public ArrayList<User> getUsers()
 	{
 		return users;
 	}
 	
+	/**
+	 * Returns a specific user based on their user ID
+	 * 
+	 * @param userId The user ID of the user to be returned
+	 * @return The specified user
+	 */
 	public User getUser(int userId)
 	{
 		User user = users.get(userId - 1);
 		return user;
 	}
 	
+	/**
+	 * This method reads in the data about the users, movies and ratings from the specified files
+	 * 
+	 * @throws Exception
+	 */
 	public void readInData() throws Exception
 	{
 		File usersFile = new File("data_movieLens/users.dat");
@@ -96,6 +120,9 @@ public class Recommender
 		setUsersRatings();
 	}
 	
+	/**
+	 * This method sets the ratings and scores for each user by going through the ratings and users ArrayLists
+	 */
 	public void setUsersRatings()
 	{
 		int unknownScore, actionScore, adventureScore, animationScore, childrensScore, comedyScore, 
@@ -262,6 +289,12 @@ public class Recommender
 		}
 	}
 	
+	/**
+	 * This method recommends movies to a user specified by their user ID by checking what their favourite genre is based on previous ratings
+	 * and recommends to them highly rated movies in that genre
+	 * 
+	 * @param userId The user ID of the user that is getting recommendations
+	 */
 	public void getUserRecommendations(int userId)
 	{
 		User recommendee = users.get((userId-1));
@@ -543,16 +576,57 @@ public class Recommender
 		}
 	}
 	
+	/**
+	 * Creates and adds a new user to the users ArrayList
+	 * 
+	 * @param firstName The new user's first name
+	 * @param lastName The new user's last name
+	 * @param age The new user's age
+	 * @param gender The new users's gender
+	 * @param occupation The new user's occupation 
+	 * @throws Exception
+	 */
 	public void addUser(String firstName, String lastName, int age, String gender, String occupation) throws Exception
 	{
 		users.add(new User(users.size() + 1, firstName, lastName, age, gender, occupation));
 	}
 	
+	/**
+	 * Deletes a user from the ArrayList of users
+	 * 
+	 * @param userId The user ID of the user that is to be deleted
+	 */
 	public void removeUser(int userId)
 	{
 		users.remove(userId - 1);
 	}
 	
+	/**
+	 * Creates and adds a movie to the movies ArrayList
+	 * 
+	 * @param title The title of the movie
+	 * @param longDate The date the movie was released in String format
+	 * @param url The url for the imdb page of the movie
+	 * @param unknown A boolean which sets whether the movie is in the unknown genre or not
+	 * @param action A boolean which sets whether the movie is in the action genre or not
+	 * @param adventure A boolean which sets whether the movie is in the adventure genre or not
+	 * @param animation A boolean which sets whether the movie is in the animation genre or not
+	 * @param childrens A boolean which sets whether the movie is in the children's genre or not
+	 * @param comedy A boolean which sets whether the movie is in the comedy genre or not
+	 * @param crime A boolean which sets whether the movie is in the crime genre or not
+	 * @param documentary A boolean which sets whether the movie is in the documentary genre or not
+	 * @param drama A boolean which sets whether the movie is in the drama genre or not
+	 * @param fantasy A boolean which sets whether the movie is in the fantasy genre or not
+	 * @param filmNoir A boolean which sets whether the movie is in the film noir genre or not
+	 * @param horror A boolean which sets whether the movie is in the horror genre or not
+	 * @param musical A boolean which sets whether the movie is in the musical genre or not
+	 * @param mystery A boolean which sets whether the movie is in the mystery genre or not
+	 * @param romance A boolean which sets whether the movie is in the romance genre or not
+	 * @param sciFi A boolean which sets whether the movie is in the Sci-Fi genre or not
+	 * @param thriller A boolean which sets whether the movie is in the thriller genre or not
+	 * @param war A boolean which sets whether the movie is in the war genre or not
+	 * @param western A boolean which sets whether the movie is in the western genre or not
+	 */
 	public void addMovie(String title, String longDate, String url, boolean unknown, boolean action, boolean adventure,
 			boolean animation, boolean childrens, boolean comedy, boolean crime, boolean documentary, boolean drama, 
 			boolean fantasy, boolean filmNoir, boolean horror, boolean musical, boolean mystery, boolean romance, 
@@ -563,11 +637,22 @@ public class Recommender
 				thriller, war, western));
 	}
 	
+	/**
+	 * Deletes a movie from the movies ArrayList
+	 * 
+	 * @param movieId The movie ID of the movie that is to be deleted
+	 */
 	public void removeMovie(int movieId)
 	{
 		movies.remove(movieId - 1);
 	}
 	
+	/**
+	 * Gets the details of a specified movie
+	 * 
+	 * @param movieId The movie ID of the movie that the details are to be gotten
+	 * @return The toString of the specified movie
+	 */
 	public String getMovieDetails(int movieId)
 	{
 		if(movieId > 0 && movieId <= movies.size())
@@ -580,6 +665,13 @@ public class Recommender
 		}
 	}
 	
+	/**
+	 * Creates and adds a rating to the ratings ArrayList
+	 * 
+	 * @param userId The user ID of the user who made the rating
+	 * @param movieId The movie ID of the movie that is being rated
+	 * @param rating The rating itself
+	 */
 	public void addRating(int userId, int movieId, int rating)
 	{
 		if(rating > 0 && rating < 6)
@@ -592,12 +684,24 @@ public class Recommender
 		}
 	}
 	
+	/**
+	 * Returns a movie object based on a specific movie ID
+	 * 
+	 * @param movieId The movie ID of the movie to be returned
+	 * @return
+	 */
 	public Movie getMovie(int movieId)
 	{
 		Movie movie = movies.get(movieId - 1);
 		return movie;
 	}
 	
+	/**
+	 * Returns a String of a specific user's ratings
+	 * 
+	 * @param userId The user ID of the user whose ratings are to be checked
+	 * @return The ratings of the specific user
+	 */
 	public String getUserRatings(int userId) 
 	{
 		ArrayList<Rating> userRatings = new ArrayList<Rating>();
@@ -612,7 +716,12 @@ public class Recommender
 		else
 			return usersRatings;
 	}
-	
+
+	/**
+	 * This method loads the data from saved xml files
+	 * 
+	 * @throws Exception
+	 */
 	public void load() throws Exception
 	{
 		users = HandleXML.readUsers();
@@ -622,6 +731,11 @@ public class Recommender
 		addTotalMovieRatings();
 	}
 	
+	/**
+	 * This method saves the data to xml files
+	 * 
+	 * @throws Exception
+	 */
 	public void save() throws Exception
 	{
 		HandleXML.writeUsers(users);
@@ -629,6 +743,9 @@ public class Recommender
 		HandleXML.writeRatings(ratings);
 	}
 	
+	/**
+	 * This method calculates the average rating for a movie, taking into account all ratings for the movie
+	 */
 	public void addTotalMovieRatings()
 	{
 		double rating;
@@ -649,6 +766,9 @@ public class Recommender
 		}
 	}
 	
+	/**
+	 * This method prints to the screen the top ten highest rated movies in the database
+	 */
 	public void getTopTenMovies()
 	{
 		Collections.sort(movies);
@@ -658,6 +778,11 @@ public class Recommender
 		}
 	}
 	
+	/**
+	 * This method returns a String with all the movies' toString information
+	 * 
+	 * @return The toString of all movies in the movies arrayList
+	 */
 	public String getAllMovies()
 	{
 		String moviesString = "";
@@ -668,7 +793,13 @@ public class Recommender
 		return moviesString;
 	}
 	
-	public boolean genreTranslator(int input)
+	/**
+	 * This method is used when reading in the movies data to convert the binary genre information to boolean
+	 * 
+	 * @param input The binary input
+	 * @return The boolean output
+	 */
+	private boolean genreTranslator(int input)
 	{
 		if(input == 1)
 			return true;
@@ -676,6 +807,12 @@ public class Recommender
 			return false;
 	}
 	
+	/**
+	 * This method is used to avoid division by zero errors in the setUserRatings method
+	 * 
+	 * @param num The number to be checked
+	 * @return The number or 1 if the number was 0
+	 */
 	private int zeroAvoider(int num)
 	{
 		if(num == 0)

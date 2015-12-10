@@ -1,4 +1,8 @@
-
+/**
+ * 
+ * @author Chris Bodels
+ *
+ */
 public class Movie implements Comparable<Movie> {
 	
 	private String title, url, longDate;
